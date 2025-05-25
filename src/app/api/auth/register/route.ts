@@ -34,8 +34,9 @@ export async function POST(req: Request) {
       },
     });
 
-    // Remove password from response
-    const { password: _password, ...userWithoutPassword } = user;
+    // Remove password from user object before sending response
+    delete user.password;
+    const userWithoutPassword = user;
 
     return NextResponse.json(
       { message: 'User created successfully', user: userWithoutPassword },

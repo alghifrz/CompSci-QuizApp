@@ -2,8 +2,6 @@ import NextAuth from "next-auth";
 import { AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { Session } from "next-auth";
-import { JWT } from "next-auth/jwt";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
@@ -89,7 +87,7 @@ export const authOptions: AuthOptions = {
     maxAge: 24 * 60 * 60, // 24 hours
   },
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ user, account }) {
       if (account?.provider === "google") {
         try {
           // Check if user exists with this specific Google account
@@ -155,7 +153,7 @@ export const authOptions: AuthOptions = {
     }
   },
   events: {
-    async signOut({ session, token }) {
+    async signOut({ token }) {
       if (token) {
         token.accessToken = undefined;
       }

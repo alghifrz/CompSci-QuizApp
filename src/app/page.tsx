@@ -7,9 +7,15 @@ import Button from './components/ui/Button';
 import { useEffect, useState } from 'react';
 import Card from './components/ui/Card';
 
+type LeaderboardEntry = {
+  name: string | null;
+  email: string | null;
+  score: number;
+  // tambahkan field lain jika ada
+};
 
 export default function HomePage() {
-  const [leaderboard, setLeaderboard] = useState<any[]>([]);
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -21,6 +27,7 @@ export default function HomePage() {
         const data = await res.json();
         setLeaderboard(data.leaderboard || []);
       } catch (e) {
+        console.error('Error fetching leaderboard:', e);
         setLeaderboard([]);
       } finally {
         setLoading(false);
@@ -72,9 +79,9 @@ export default function HomePage() {
       {/* Testimonial Section */}
       <section className="max-w-3xl mx-auto py-6 sm:py-8 px-4 text-center">
         <div className="bg-gradient-to-r from-purple-100 to-indigo-100 rounded-2xl p-6 sm:p-8 shadow-md">
-          <blockquote className="text-xl sm:text-2xl italic text-gray-700 mb-4">"Learning is more effective when it&apos;s fun. Challenge yourself and see how far you can go!"</blockquote>
+          <blockquote className="text-xl sm:text-2xl italic text-gray-700 mb-4">&quot;Learning is more effective when it&apos;s fun. Challenge yourself and see how far you can go!&quot;</blockquote>
           <div className="flex items-center justify-center gap-2">
-            <span className="font-semibold text-gray-900">&apos;&apos;Anonymous&apos;&apos;</span>
+            <span className="font-semibold text-gray-900">&quot;Anonymous&quot;</span>
           </div>
         </div>
       </section>

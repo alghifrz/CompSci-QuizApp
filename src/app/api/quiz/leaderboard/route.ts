@@ -11,6 +11,20 @@ interface LeaderboardEntry {
   completedAt: Date;
 }
 
+type QuizAttempt = {
+  correctAnswers: number;
+  wrongAnswers: number;
+  timeSpent: number;
+  score: number;
+  completedAt: Date;
+};
+
+type UserWithAttempts = {
+  name: string | null;
+  email: string | null;
+  quizAttempts: QuizAttempt[];
+};
+
 export async function GET() {
   try {
     // Get all users with all their quiz attempts
@@ -21,16 +35,17 @@ export async function GET() {
     });
 
     // For each user, find their highest score attempt (if tie, pick fastest time)
-    let leaderboard: LeaderboardEntry[] = users
-      .map((user: any) => {
+    let leaderboard: LeaderboardEntry[] = (users as UserWithAttempts[])
+      .map((user) => {
         if (!user.quizAttempts || user.quizAttempts.length === 0) return null;
         // Find highest score, then fastest time
-        const bestAttempt = user.quizAttempts.reduce((best: any, curr: any) => {
+        const bestAttempt = user.quizAttempts.reduce((best: QuizAttempt | null, curr: QuizAttempt) => {
           if (!best) return curr;
           if (curr.score > best.score) return curr;
           if (curr.score === best.score && curr.timeSpent < best.timeSpent) return curr;
           return best;
-        }, null);
+        }, null as QuizAttempt | null);
+        if (!bestAttempt) return null;
         return {
           name: user.name,
           email: user.email,

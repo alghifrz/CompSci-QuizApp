@@ -6,8 +6,18 @@ import Card from '@/app/components/ui/Card';
 import Button from '@/app/components/ui/Button';
 import { useRouter } from 'next/navigation';
 
+type LeaderboardEntry = {
+  name: string | null;
+  email: string | null;
+  score: number;
+  correctAnswers: number;
+  wrongAnswers: number;
+  timeSpent: number;
+  createdAt: string;
+};
+
 export default function LeaderboardPage() {
-  const [leaderboard, setLeaderboard] = useState<any[]>([]);
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -20,6 +30,7 @@ export default function LeaderboardPage() {
         const data = await res.json();
         setLeaderboard(data.leaderboard || []);
       } catch (e) {
+        console.error('Error fetching leaderboard:', e);
         setLeaderboard([]);
       } finally {
         setLoading(false);
@@ -53,7 +64,7 @@ export default function LeaderboardPage() {
               {/* Mobile Card List */}
               <div className="block sm:hidden space-y-4">
                 {leaderboard.map((entry, idx) => {
-                  let badgeColor = idx === 0 ? 'bg-yellow-400 text-white' : idx === 1 ? 'bg-gray-300 text-white' : idx === 2 ? 'bg-amber-600 text-white' : 'bg-gray-200 text-gray-700';
+                  const badgeColor = idx === 0 ? 'bg-yellow-400 text-white' : idx === 1 ? 'bg-gray-300 text-white' : idx === 2 ? 'bg-amber-600 text-white' : 'bg-gray-200 text-gray-700';
                   return (
                     <div key={entry.email} className="flex items-center p-4 rounded-xl bg-purple-50 shadow-sm">
                       <div className={`w-8 h-8 flex-shrink-0 rounded-full flex items-center justify-center font-bold mr-3 ${badgeColor}`}>{idx + 1}</div>
@@ -86,7 +97,7 @@ export default function LeaderboardPage() {
                   </thead>
                   <tbody>
                     {leaderboard.map((entry, idx) => {
-                      let rowBg = idx % 2 === 0 ? 'bg-white' : 'bg-gray-50';
+                      const rowBg = idx % 2 === 0 ? 'bg-white' : 'bg-gray-50';
                       let rankColor = '';
                       if (idx === 0) rankColor = 'bg-yellow-400 text-white';
                       else if (idx === 1) rankColor = 'bg-gray-300 text-white';

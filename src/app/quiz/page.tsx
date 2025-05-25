@@ -128,52 +128,6 @@ export default function QuizPage() {
     return textarea.value;
   };
 
-  useEffect(() => {
-    if (timeLeft > 0 && questions.length > 0) {
-      const timer = setInterval(() => {
-        setTimeLeft((prev) => prev - 1);
-      }, 1000);
-      return () => clearInterval(timer);
-    } else if (timeLeft === 0) {
-      handleQuizEnd(true);
-    }
-  }, [timeLeft, questions]);
-
-  const handleAnswerSelect = (answer: string) => {
-    if (selectedAnswer) return; // Prevent multiple selections
-
-    setSelectedAnswer(answer);
-    const isCorrect = answer === questions[currentQuestion].correct_answer;
-    
-    if (isCorrect) {
-      setScore((prev) => prev + 10);
-      setCorrectAnswers((prev) => prev + 1);
-    } else {
-      setScore((prev) => Math.max(0, prev - 5));
-      setWrongAnswers((prev) => prev + 1);
-    }
-
-    // Move to next question after a short delay
-    setTimeout(() => {
-      if (currentQuestion < questions.length - 1) {
-        setCurrentQuestion((prev) => prev + 1);
-        setSelectedAnswer(null);
-      } else {
-        handleQuizEnd();
-      }
-    }, 1000);
-  };
-
-  const handleSkip = () => {
-    // Move to next question immediately
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion((prev) => prev + 1);
-      setSelectedAnswer(null);
-    } else {
-      handleQuizEnd();
-    }
-  };
-
   const handleQuizEnd = async (isTimeUp = false) => {
     try {
       const timeSpent = isTimeUp ? 600 : Math.floor((Date.now() - startTime) / 1000);
@@ -215,6 +169,52 @@ export default function QuizPage() {
     } catch (error) {
       console.error('Error saving quiz attempt:', error);
       setError('Failed to save quiz results. Please try again.');
+    }
+  };
+
+  useEffect(() => {
+    if (timeLeft > 0 && questions.length > 0) {
+      const timer = setInterval(() => {
+        setTimeLeft((prev) => prev - 1);
+      }, 1000);
+      return () => clearInterval(timer);
+    } else if (timeLeft === 0) {
+      handleQuizEnd(true);
+    }
+  }, [timeLeft, questions, handleQuizEnd]);
+
+  const handleAnswerSelect = (answer: string) => {
+    if (selectedAnswer) return; // Prevent multiple selections
+
+    setSelectedAnswer(answer);
+    const isCorrect = answer === questions[currentQuestion].correct_answer;
+    
+    if (isCorrect) {
+      setScore((prev) => prev + 10);
+      setCorrectAnswers((prev) => prev + 1);
+    } else {
+      setScore((prev) => (prev - 5));
+      setWrongAnswers((prev) => prev + 1);
+    }
+
+    // Move to next question after a short delay
+    setTimeout(() => {
+      if (currentQuestion < questions.length - 1) {
+        setCurrentQuestion((prev) => prev + 1);
+        setSelectedAnswer(null);
+      } else {
+        handleQuizEnd();
+      }
+    }, 1000);
+  };
+
+  const handleSkip = () => {
+    // Move to next question immediately
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion((prev) => prev + 1);
+      setSelectedAnswer(null);
+    } else {
+      handleQuizEnd();
     }
   };
 
@@ -273,8 +273,6 @@ export default function QuizPage() {
     return null;
   }
 
-  const currentQ = questions[currentQuestion];
-
   return (
     <DashboardLayout>
       <div className="max-w-3xl mx-auto space-y-8">
@@ -324,7 +322,7 @@ export default function QuizPage() {
                 onClick={() => handleAnswerSelect(answer)}
                 disabled={selectedAnswer !== null}
                 variant="outline"
-                className={`cursor-pointer w-full p-3 sm:p-4 text-left rounded-lg border transition-colors ${
+                className={`cursor-pointer w-full md:p-4 lg:p-6 text-left rounded-lg border-2 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-md ${
                   selectedAnswer === answer
                     ? answer === questions[currentQuestion].correct_answer
                       ? 'bg-green-50 border-green-500 text-green-700 shadow-sm'

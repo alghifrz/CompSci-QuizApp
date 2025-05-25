@@ -48,6 +48,7 @@ export default function LoginPage() {
         router.push('/dashboard');
       }
     } catch (error) {
+      console.error('Login error:', error);
       setError('Terjadi kesalahan. Silakan coba lagi.');
     } finally {
       setIsLoading(false);
@@ -69,6 +70,11 @@ export default function LoginPage() {
     >
       <Card className="space-y-6">
         <form onSubmit={handleSubmit} className="space-y-6">
+          {error && (
+            <div className="p-3 text-sm text-red-500 bg-red-50 rounded-lg">
+              {error}
+            </div>
+          )}
           <div>
             <Input
               type="email"
@@ -95,11 +101,7 @@ export default function LoginPage() {
               </Link>
             </div>
           </div>
-          {error && (
-            <div className="p-3 text-sm text-red-500 bg-red-50 rounded-lg">
-              {error}
-            </div>
-          )}
+          
           <Button
             type="submit"
             className="w-full h-12 text-base"
@@ -174,7 +176,7 @@ export default function LoginPage() {
         </Button>
 
         <p className="text-center text-sm text-gray-600">
-          Don't have an account?{' '}
+          Don&apos;t have an account?{' '}
           <Link 
             href="/register" 
             className="font-medium text-purple-600 hover:text-purple-500"

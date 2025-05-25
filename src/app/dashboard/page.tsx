@@ -8,6 +8,21 @@ import Card from '@/app/components/ui/Card';
 import Button from '@/app/components/ui/Button';
 import ModalQuiz from '../components/ui/ModalQuiz';
 
+type QuizAttempt = {
+  score: number;
+  correctAnswers: number;
+  wrongAnswers: number;
+  timeSpent: number;
+  completedAt: string;
+};
+
+type LeaderboardEntry = {
+  name: string | null;
+  email: string | null;
+  score: number;
+  // tambahkan field lain jika perlu
+};
+
 export default function DashboardPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -17,7 +32,7 @@ export default function DashboardPage() {
     avgScore: 0,
     highestScore: 0,
   });
-  const [leaderboard, setLeaderboard] = useState<any[]>([]);
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [loadingStats, setLoadingStats] = useState(true);
   const [loadingLeaderboard, setLoadingLeaderboard] = useState(true);
 
@@ -37,10 +52,11 @@ export default function DashboardPage() {
         const data = await res.json();
         const attempts = data.attempts || [];
         const quizTaken = attempts.length;
-        const avgScore = quizTaken > 0 ? Math.round(attempts.reduce((acc: number, a: any) => acc + a.score, 0) / quizTaken) : 0;
-        const highestScore = quizTaken > 0 ? Math.max(...attempts.map((a: any) => a.score)) : 0;
+        const avgScore = quizTaken > 0 ? Math.round(attempts.reduce((acc: number, a: QuizAttempt) => acc + a.score, 0) / quizTaken) : 0;
+        const highestScore = quizTaken > 0 ? Math.max(...attempts.map((a: QuizAttempt) => a.score)) : 0;
         setUserStats({ quizTaken, avgScore, highestScore });
       } catch (e) {
+        console.error('Error fetching stats:', e);
         setUserStats({ quizTaken: 0, avgScore: 0, highestScore: 0 });
       } finally {
         setLoadingStats(false);
@@ -59,6 +75,7 @@ export default function DashboardPage() {
         const data = await res.json();
         setLeaderboard(data.leaderboard || []);
       } catch (e) {
+        console.error('Error fetching leaderboard:', e);
         setLeaderboard([]);
       } finally {
         setLoadingLeaderboard(false);

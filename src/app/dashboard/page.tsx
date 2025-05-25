@@ -131,8 +131,8 @@ export default function DashboardPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           {/* Left: Quiz Rules */}
-          <div className="lg:col-span-2">
-            <Card className="p-6 sm:p-8 bg-white rounded-2xl">
+          <div className="lg:col-span-2 ">
+            <Card className="p-6 sm:p-8 bg-white rounded-2xl lg:pb-13">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8">
                 <div className="space-y-1">
                   <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Quiz Rules</h2>

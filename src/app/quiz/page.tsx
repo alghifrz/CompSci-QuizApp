@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import DashboardLayout from '@/app/components/layouts/DashboardLayout';
@@ -128,7 +128,7 @@ export default function QuizPage() {
     return textarea.value;
   };
 
-  const handleQuizEnd = async (isTimeUp = false) => {
+  const handleQuizEnd = useCallback(async (isTimeUp = false) => {
     try {
       const timeSpent = isTimeUp ? 600 : Math.floor((Date.now() - startTime) / 1000);
       localStorage.removeItem('quizQuestions');
@@ -170,7 +170,7 @@ export default function QuizPage() {
       console.error('Error saving quiz attempt:', error);
       setError('Failed to save quiz results. Please try again.');
     }
-  };
+  }, [score, correctAnswers, wrongAnswers, startTime, router]);
 
   useEffect(() => {
     if (timeLeft > 0 && questions.length > 0) {

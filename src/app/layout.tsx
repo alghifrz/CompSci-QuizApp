@@ -16,12 +16,14 @@ export const metadata: Metadata = {
   description: "Test your computer science knowledge",
   icons: {
     icon: [
-      {
-        url: "/icon.png",
-        sizes: "64x64",
-        type: "image/png"
-      }
-    ]
+      { url: "/icon.png", sizes: "64x64", type: "image/png" },
+      { url: "/icon.png", sizes: "32x32", type: "image/png" },
+      { url: "/icon.png", sizes: "16x16", type: "image/png" }
+    ],
+    apple: [
+      { url: "/icon.png", sizes: "180x180", type: "image/png" }
+    ],
+    shortcut: ["/icon.png"]
   },
 };
 

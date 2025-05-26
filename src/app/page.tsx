@@ -86,6 +86,22 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="max-w-3xl mx-auto py-6 sm:py-8 px-4">
+        <div className="bg-gradient-to-r from-purple-100 to-indigo-100 rounded-2xl p-6 sm:p-8 shadow-md">
+          <div className="flex items-center justify-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-purple-200 flex items-center justify-center">
+              <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-gray-800 mb-1">Total Users</h2>
+              <p className="text-4xl font-bold text-purple-600">{leaderboard.length}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Leaderboard Section */}
       <section className="max-w-2xl mx-auto py-6 sm:py-8 px-4 w-full">
         <Card className="p-4 sm:p-6 bg-white rounded-2xl">

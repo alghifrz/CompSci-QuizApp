@@ -7,6 +7,7 @@ import Button from '../ui/Button';
 import Image from 'next/image';
 import { useState } from 'react';
 import ModalQuiz from '../ui/ModalQuiz';
+import { useRouter } from 'next/navigation';
 
 
 export default function Navbar() {
@@ -14,7 +15,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const router = useRouter();
   const handleStartQuiz = () => {
     setIsModalOpen(true);
   };
@@ -80,11 +81,11 @@ export default function Navbar() {
                     {session?.user?.name || session?.user?.email}
                   </span>
                   <Button
-                    onClick={() => signOut({ callbackUrl: '/' })}
+                    onClick={session ? () => signOut({ callbackUrl: '/' }) : () => router.push('/login')}
                     variant="outline"
                     className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-gradient-to-b from-purple-800 to-indigo-800 hover:from-purple-900 hover:to-indigo-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 cursor-pointer"
                   >
-                    Sign out
+                    {session ? 'Sign out' : 'Login'}
                   </Button>
                 </div>
               </div>

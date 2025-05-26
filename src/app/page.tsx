@@ -16,6 +16,7 @@ type LeaderboardEntry = {
 
 export default function HomePage() {
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+  const [totalUsers, setTotalUsers] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -34,6 +35,24 @@ export default function HomePage() {
       }
     };
     fetchLeaderboard();
+  }, []);
+
+  useEffect(() => {
+    const fetchTotalUsers = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch('/api/users/count');
+        if (!res.ok) throw new Error('Failed to fetch total users');
+        const data = await res.json();
+        setTotalUsers(data.totalUsers || 0);
+      } catch (e) {
+        console.error('Error fetching total users:', e);
+        setTotalUsers(0);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTotalUsers();
   }, []);
 
   return (
@@ -96,7 +115,7 @@ export default function HomePage() {
             </div>
             <div className="text-center">
               <h2 className="text-2xl font-bold text-gray-800 mb-1">Total Users</h2>
-              <p className="text-4xl font-bold text-purple-600">{leaderboard.length}</p>
+              <p className="text-4xl font-bold text-purple-600">{loading ? '...' : totalUsers}</p>
             </div>
           </div>
         </div>

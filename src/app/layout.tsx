@@ -14,6 +14,15 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Computer Science Quiz App",
   description: "Test your computer science knowledge",
+  icons: {
+    icon: [
+      {
+        url: "/icon.png",
+        sizes: "64x64",
+        type: "image/png"
+      }
+    ]
+  },
 };
 
 export default function RootLayout({
